@@ -80,8 +80,10 @@ def svm_loss_vectorized(W, X, y, reg):
   #############################################################################
   num_classes = W.shape[1]
   num_train = X.shape[0]
-  loss = np.sum(np.maximum((X.dot(W)+1-X.dot(W)[np.arange(num_train),y].reshape(num_train,1)),0))
-  loss -= num_train*1
+  scores = X.dot(W)
+  correct_class_score = X.dot(W)[np.arange(num_train),y].reshape(num_train,1)
+  loss = np.sum(np.maximum((scores+1-correct_class_score),0))
+  loss -= num_train*1 # cancel the part of true class 
   loss /= num_train
   loss += reg * np.sum(W * W)
   pass
@@ -99,6 +101,19 @@ def svm_loss_vectorized(W, X, y, reg):
   # to reuse some of the intermediate values that you used to compute the     #
   # loss.                                                                     #
   #############################################################################
+  # crrsponds to: dW[:,j:j+1] += np.reshape(X[i],(3073, 1))
+  dW += (num_classes-1)* np.sum(X, axis=0).reshape(W.shape[0],1) # Compute sum of each column;
+  print('np.sum(X, axis=0).shape:', np.sum(X, axis=0).shape)
+  print('np.sum(X, axis=0).reshape(W.shape[0],1):', np.sum(X, axis=0).reshape(W.shape[0],1).shape)
+  (values,counts) = np.unique(y,return_counts=True)
+  print('values,counts',values,counts)
+  print('grad wrt correct classes' , np.sum(X, axis=0).reshape(W.shape[0],1).dot(counts.reshape(1,num_classes)).shape)
+  print('np.sum(X, axis=0).reshape(W.shape[0],1)' , np.sum(X, axis=0).reshape(W.shape[0],1))
+  print('counts.reshape(1,num_classes)' , counts.reshape(1,num_classes))
+  # crrsponds to: dW[:,y[i]:y[i]+1] -= np.reshape(X[i],(3073, 1))
+  dW -= (num_classes-1)* np.sum(X, axis=0).reshape(W.shape[0],1).dot(counts.reshape(1,num_classes))
+  dW /= num_train
+  dW += reg *2* W
   pass
   #############################################################################
   #                             END OF YOUR CODE                              #
