@@ -102,16 +102,26 @@ def svm_loss_vectorized(W, X, y, reg):
   # loss.                                                                     #
   #############################################################################
   # crrsponds to: dW[:,j:j+1] += np.reshape(X[i],(3073, 1))
-  dW += (num_classes-1)* np.sum(X, axis=0).reshape(W.shape[0],1) # Compute sum of each column;
+  dW += np.sum(X, axis=0).reshape(W.shape[0],1) # Compute sum of each column;
   print('np.sum(X, axis=0).shape:', np.sum(X, axis=0).shape)
   print('np.sum(X, axis=0).reshape(W.shape[0],1):', np.sum(X, axis=0).reshape(W.shape[0],1).shape)
   (values,counts) = np.unique(y,return_counts=True)
   print('values,counts',values,counts)
+  print('y:',y)
+  print('X.shape:',X.shape)
+  # print('dW:',dW)
   print('grad wrt correct classes' , np.sum(X, axis=0).reshape(W.shape[0],1).dot(counts.reshape(1,num_classes)).shape)
   print('np.sum(X, axis=0).reshape(W.shape[0],1)' , np.sum(X, axis=0).reshape(W.shape[0],1))
   print('counts.reshape(1,num_classes)' , counts.reshape(1,num_classes))
   # crrsponds to: dW[:,y[i]:y[i]+1] -= np.reshape(X[i],(3073, 1))
-  dW -= (num_classes-1)* np.sum(X, axis=0).reshape(W.shape[0],1).dot(counts.reshape(1,num_classes))
+  targets = y.reshape(-1)
+  one_hot_correct_class = np.eye(num_classes)[targets]
+  dW_correct_class = X.T.dot(one_hot_correct_class)
+  print('X.T.shape' , X.T.shape)
+  print('one_hot_correct_class.shape' , one_hot_correct_class.shape)
+  print('dW_correct_class.shape' , dW_correct_class.shape)
+  # dW -= (num_classes-1)* np.sum(X, axis=0).reshape(W.shape[0],1).dot(counts.reshape(1,num_classes))
+  dW -= (num_classes)* dW_correct_class
   dW /= num_train
   dW += reg *2* W
   pass
