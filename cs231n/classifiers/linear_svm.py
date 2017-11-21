@@ -124,7 +124,7 @@ def svm_loss_vectorized(W, X, y, reg):
   #print('(dW_compn_count) shape:',dW_compn_count.shape)
   #print('dW_compn_count:',dW_compn_count)
   #print(one_hot_correct_class * dW_compn_count[:,None])
-  dW_compn_mask += -1 * one_hot_correct_class * dW_compn_count[:,None]
+  dW_compn_mask += -1 * one_hot_correct_class * dW_compn_count[:,None] # stackoverflow , 19602187 , numpy-divide-each-row-by-a-vector-element
   #print('dW_compn_mask:',dW_compn_mask)
   #dW_correct_class = X.T.dot(one_hot_correct_class)
   dW = X.T.dot(dW_compn_mask)
