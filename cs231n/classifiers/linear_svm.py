@@ -107,30 +107,30 @@ def svm_loss_vectorized(W, X, y, reg):
   dW_compn_mask = np.maximum((scores+1-correct_class_score),0) # margin
   gt_zero_indices = dW_compn_mask > 0 # stackoverflow , 28430904 ,
   dW_compn_mask[gt_zero_indices] = 1
-  print('dW_compn_mask.shape, dW_compn_mask: ' , dW_compn_mask.shape, dW_compn_mask)
+  #print('dW_compn_mask.shape, dW_compn_mask: ' , dW_compn_mask.shape, dW_compn_mask)
   dW_compn_count = np.sum(dW_compn_mask, axis=1) # Compute sum of each row;
   #print('dW_compn_count.shape, dW_compn_count: ' , dW_compn_count.shape, dW_compn_count)
   (values,counts) = np.unique(dW_compn_count,return_counts=True)
-  print('values,counts',values,counts)
+  #print('values,counts',values,counts)
   targets = y.reshape(-1)
   one_hot_correct_class = np.eye(num_classes)[targets]
   dW_compn_mask -= one_hot_correct_class
   dW_compn_count = np.sum(dW_compn_mask, axis=1) # Compute sum of each row;
   #print('dW_compn_count.shape, dW_compn_count: ' , dW_compn_count.shape, dW_compn_count)
   (values,counts) = np.unique(dW_compn_count,return_counts=True)
-  print('values,counts',values,counts)
-  print('one_hot_correct_class:',one_hot_correct_class)
+  #print('values,counts',values,counts)
+  #print('one_hot_correct_class:',one_hot_correct_class)
   #one_hot_correct_class = (dW_compn_count.reshape(num_train,1).T).dot(one_hot_correct_class)
-  print('(dW_compn_count) shape:',dW_compn_count.shape)
-  print('dW_compn_count:',dW_compn_count)
-  print(one_hot_correct_class * dW_compn_count[:,None])
+  #print('(dW_compn_count) shape:',dW_compn_count.shape)
+  #print('dW_compn_count:',dW_compn_count)
+  #print(one_hot_correct_class * dW_compn_count[:,None])
   dW_compn_mask += -1 * one_hot_correct_class * dW_compn_count[:,None]
-  print('dW_compn_mask:',dW_compn_mask)
+  #print('dW_compn_mask:',dW_compn_mask)
   dW_correct_class = X.T.dot(one_hot_correct_class)
   dW = X.T.dot(dW_compn_mask)
-  print('X.T.shape' , X.T.shape)
-  print('one_hot_correct_class.shape' , one_hot_correct_class.shape)
-  print('dW_correct_class.shape' , dW_correct_class.shape)
+  #print('X.T.shape' , X.T.shape)
+  #print('one_hot_correct_class.shape' , one_hot_correct_class.shape)
+  #print('dW_correct_class.shape' , dW_correct_class.shape)
   # dW -= (num_classes-1)* np.sum(X, axis=0).reshape(W.shape[0],1).dot(counts.reshape(1,num_classes))
   # dW -= (num_classes)* dW_correct_class
   dW /= num_train
