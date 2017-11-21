@@ -124,15 +124,15 @@ def svm_loss_vectorized(W, X, y, reg):
   print('(dW_compn_count) shape:',dW_compn_count.shape)
   print('dW_compn_count:',dW_compn_count)
   print(one_hot_correct_class * dW_compn_count[:,None])
-  dW_compn_mask += one_hot_correct_class * dW_compn_count[:,None]
+  dW_compn_mask += -1 * one_hot_correct_class * dW_compn_count[:,None]
   print('dW_compn_mask:',dW_compn_mask)
   dW_correct_class = X.T.dot(one_hot_correct_class)
-  dW_correct_class = X.T.dot(dW_compn_mask)
+  dW = X.T.dot(dW_compn_mask)
   print('X.T.shape' , X.T.shape)
   print('one_hot_correct_class.shape' , one_hot_correct_class.shape)
   print('dW_correct_class.shape' , dW_correct_class.shape)
   # dW -= (num_classes-1)* np.sum(X, axis=0).reshape(W.shape[0],1).dot(counts.reshape(1,num_classes))
-  dW -= (num_classes)* dW_correct_class
+  # dW -= (num_classes)* dW_correct_class
   dW /= num_train
   dW += reg *2* W
   pass
