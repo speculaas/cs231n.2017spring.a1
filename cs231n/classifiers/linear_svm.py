@@ -110,14 +110,14 @@ def svm_loss_vectorized(W, X, y, reg):
   #print('dW_compn_mask.shape, dW_compn_mask: ' , dW_compn_mask.shape, dW_compn_mask)
   dW_compn_count = np.sum(dW_compn_mask, axis=1) # Compute sum of each row;
   #print('dW_compn_count.shape, dW_compn_count: ' , dW_compn_count.shape, dW_compn_count)
-  (values,counts) = np.unique(dW_compn_count,return_counts=True)
+  #(values,counts) = np.unique(dW_compn_count,return_counts=True)
   #print('values,counts',values,counts)
   targets = y.reshape(-1)
   one_hot_correct_class = np.eye(num_classes)[targets]
   dW_compn_mask -= one_hot_correct_class
   dW_compn_count = np.sum(dW_compn_mask, axis=1) # Compute sum of each row;
   #print('dW_compn_count.shape, dW_compn_count: ' , dW_compn_count.shape, dW_compn_count)
-  (values,counts) = np.unique(dW_compn_count,return_counts=True)
+  #(values,counts) = np.unique(dW_compn_count,return_counts=True)
   #print('values,counts',values,counts)
   #print('one_hot_correct_class:',one_hot_correct_class)
   #one_hot_correct_class = (dW_compn_count.reshape(num_train,1).T).dot(one_hot_correct_class)
@@ -126,7 +126,7 @@ def svm_loss_vectorized(W, X, y, reg):
   #print(one_hot_correct_class * dW_compn_count[:,None])
   dW_compn_mask += -1 * one_hot_correct_class * dW_compn_count[:,None]
   #print('dW_compn_mask:',dW_compn_mask)
-  dW_correct_class = X.T.dot(one_hot_correct_class)
+  #dW_correct_class = X.T.dot(one_hot_correct_class)
   dW = X.T.dot(dW_compn_mask)
   #print('X.T.shape' , X.T.shape)
   #print('one_hot_correct_class.shape' , one_hot_correct_class.shape)
