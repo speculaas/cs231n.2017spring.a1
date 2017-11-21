@@ -102,6 +102,16 @@ def svm_loss_vectorized(W, X, y, reg):
   # loss.                                                                     #
   #############################################################################
   # crrsponds to: dW[:,j:j+1] += np.reshape(X[i],(3073, 1))
+  print('intermediate values at loss: ', np.maximum((scores+1-correct_class_score),0).shape)
+  print('intermediate values at loss: ', np.maximum((scores+1-correct_class_score),0))
+  margin = np.maximum((scores+1-correct_class_score),0)
+  gt_zero_indices = margin > 0 # stackoverflow , 28430904 ,
+  margin[gt_zero_indices] = 1
+  print('margin.shape, margin: ' , margin.shape, margin)
+  correct_class_count = np.sum(margin, axis=1) # Compute sum of each row;
+  print('correct_class_count.shape, correct_class_count: ' , correct_class_count.shape, correct_class_count)
+  (values,counts) = np.unique(correct_class_count,return_counts=True)
+  print('values,counts',values,counts)
   dW += np.sum(X, axis=0).reshape(W.shape[0],1) # Compute sum of each column;
   print('np.sum(X, axis=0).shape:', np.sum(X, axis=0).shape)
   print('np.sum(X, axis=0).reshape(W.shape[0],1):', np.sum(X, axis=0).reshape(W.shape[0],1).shape)
