@@ -55,7 +55,7 @@ class LinearClassifier(object):
       #########################################################################
       mask = np.random.choice(num_train, batch_size, replace=False)
       X_batch = X[mask]
-      y_batch = np.random.choice(y, batch_size)
+      y_batch = y[mask]
       pass
       #########################################################################
       #                       END OF YOUR CODE                                #
@@ -70,6 +70,7 @@ class LinearClassifier(object):
       # TODO:                                                                 #
       # Update the weights using the gradient and the learning rate.          #
       #########################################################################
+      # self.W += -1 * grad*(1e-3)
       pass
       #########################################################################
       #                       END OF YOUR CODE                                #
@@ -77,6 +78,8 @@ class LinearClassifier(object):
 
       if verbose and it % 100 == 0:
         print('iteration %d / %d: loss %f' % (it, num_iters, loss))
+        print('self.W.shape , grad.shape ' , self.W.shape , grad.shape )
+        print('-1 * grad*(1e-3) ' , -1 * grad*(1e-3) )
 
     return loss_history
 
