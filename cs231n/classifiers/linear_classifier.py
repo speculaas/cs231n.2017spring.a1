@@ -70,7 +70,7 @@ class LinearClassifier(object):
       # TODO:                                                                 #
       # Update the weights using the gradient and the learning rate.          #
       #########################################################################
-      # self.W += -1 * grad*(1e-3)
+      self.W += -1 * grad*(learning_rate)
       pass
       #########################################################################
       #                       END OF YOUR CODE                                #
@@ -78,8 +78,8 @@ class LinearClassifier(object):
 
       if verbose and it % 100 == 0:
         print('iteration %d / %d: loss %f' % (it, num_iters, loss))
-        print('self.W.shape , grad.shape ' , self.W.shape , grad.shape )
-        print('-1 * grad*(1e-3) ' , -1 * grad*(1e-3) )
+        #print('self.W.shape , grad.shape ' , self.W.shape , grad.shape )
+        #print('-1 * grad*(learning_rate) ' , -1 * grad*(learning_rate) )
 
     return loss_history
 
@@ -102,6 +102,8 @@ class LinearClassifier(object):
     # TODO:                                                                   #
     # Implement this method. Store the predicted labels in y_pred.            #
     ###########################################################################
+    scores = X.dot(self.W)
+    y_pred = np.argmax(scores, axis=1) # https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.argmax.html
     pass
     ###########################################################################
     #                           END OF YOUR CODE                              #
