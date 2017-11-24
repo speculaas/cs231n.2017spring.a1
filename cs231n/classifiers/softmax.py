@@ -31,15 +31,27 @@ def softmax_loss_naive(W, X, y, reg):
   # regularization!                                                           #
   #############################################################################
   num_train = X.shape[0]
+  num_train = 2
   for i in xrange(num_train):
     scores = X[i].dot(W)
+    # print('scores:', scores)
     correct_class_score = scores[y[i]]
     # for j in xrange(num_classes):
     scores -= np.max(scores)
     correct_class_score = scores[y[i]]
     # p = np.exp(scores) / np.sum(np.exp(scores))
-    p = np.exp(correct_class_score) / np.sum(np.exp(scores))
-    loss += -np.log(p)
+    # 
+    # p = np.exp(correct_class_score) / np.sum(np.exp(scores))
+    # loss += -np.log(p)
+    # equivalently
+    p = np.sum(np.exp(scores))
+    # print('scores:', scores)
+    # print('np.exp(scores):', np.exp(scores))
+    # print('p:', p)
+    print(correct_class_score , '# correct_class_score:')
+    print(np.exp(correct_class_score), '# np.exp(correct_class_score)' )
+    print(np.log(np.exp(correct_class_score)), '# np.log(np.exp(correct_class_score)):' )
+    loss += - correct_class_score + np.log(p)
   pass
   loss /= num_train
   #############################################################################
