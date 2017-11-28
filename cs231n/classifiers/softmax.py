@@ -31,21 +31,26 @@ def softmax_loss_naive(W, X, y, reg):
   # regularization!                                                           #
   #############################################################################
   num_train = X.shape[0]
+  num_classes = W.shape[1]
   x_dim = X.shape[1]
   #num_train = 2
   for i in xrange(num_train):
     scores = X[i].dot(W)
-    correct_class_score = scores[y[i]]
-    max_scores_ind = np.argmax(scores)
-    print("max_ind, max:" , max_scores_ind , scores[max_scores_ind])
-    scores -= np.max(scores)
-    correct_class_score = scores[y[i]]
-    p = np.sum(np.exp(scores))
-    loss += - correct_class_score + np.log(p)
+    shift_scores = scores - max(scores)
+    loss += -shift_scores[y[i]] + np.log(sum(np.exp(shift_scores)))
+    # dW[:,y[i]:y[i]+1] -= np.reshape(X[i],(x_dim, 1))
+    # below is from: ncchen55414/Winter-2016-CS231N
     for j in xrange(num_classes):
-    dW[:,y[i]:y[i]+1] -= np.reshape(X[i],(x_dim, 1))
+      softmax_output = np.exp(shift_scores[j])/sum(np.exp(shift_scores))
+      if j == y[i]:
+        dW[:,j] += (-1 + softmax_output) *X[i]
+      else:
+        dW[:,j] += softmax_output *X[i]
+
   pass
   loss /= num_train
+  loss +=  0.5* reg * np.sum(W * W)
+  dW = dW/num_train + reg* W
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
