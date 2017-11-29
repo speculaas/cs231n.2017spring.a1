@@ -167,7 +167,7 @@ print('Loss difference: %f' % np.abs(loss_naive - loss_vectorized))
 print('Gradient difference: %f' % grad_difference)
 
 
-# In[ ]:
+# In[74]:
 
 # Use the validation set to tune hyperparameters (regularization strength and
 # learning rate). You should experiment with different ranges for the learning
@@ -186,6 +186,18 @@ regularization_strengths = [2.5e4, 5e4]
 # This should be identical to the validation that you did for the SVM; save    #
 # the best trained softmax classifer in best_softmax.                          #
 ################################################################################
+for lr in learning_rates:
+  for rs in regularization_strengths:
+    smx = Softmax()
+    loss_hist = smx.train(X_train, y_train, learning_rate=lr, reg=rs, num_iters=1500, verbose=False)
+    y_train_pred = smx.predict(X_train)
+    accuracy_tr = np.mean(y_train == y_train_pred)
+    y_val_pred = smx.predict(X_val)
+    accuracy_v = np.mean(y_val == y_val_pred)
+    results[(lr,rs)]=(accuracy_tr, accuracy_v)
+    if accuracy_v > best_val :
+      best_val = accuracy_v
+      best_softmax = smx
 pass
 ################################################################################
 #                              END OF YOUR CODE                                #
@@ -200,7 +212,7 @@ for lr, reg in sorted(results):
 print('best validation accuracy achieved during cross-validation: %f' % best_val)
 
 
-# In[ ]:
+# In[75]:
 
 # evaluate on test set
 # Evaluate the best softmax on test set
@@ -209,7 +221,7 @@ test_accuracy = np.mean(y_test == y_test_pred)
 print('softmax on raw pixels final test set accuracy: %f' % (test_accuracy, ))
 
 
-# In[ ]:
+# In[76]:
 
 # Visualize the learned weights for each class
 w = best_softmax.W[:-1,:] # strip out the bias
@@ -226,4 +238,9 @@ for i in range(10):
     plt.imshow(wimg.astype('uint8'))
     plt.axis('off')
     plt.title(classes[i])
+
+
+# In[ ]:
+
+
 
