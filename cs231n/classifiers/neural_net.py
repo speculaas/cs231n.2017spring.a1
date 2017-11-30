@@ -76,6 +76,21 @@ class TwoLayerNet(object):
     # Store the result in the scores variable, which should be an array of      #
     # shape (N, C).                                                             #
     #############################################################################
+    X = np.hstack([X, np.ones((X.shape[0], 1))])
+    #W1 = np.vstack([W1, b1.reshape(-1,1)])
+    W1 = np.vstack([W1, b1.reshape(1,-1)])
+    A1 = X.dot(W1)
+    A1 = np.hstack([A1, np.ones((A1.shape[0], 1))])
+    W2 = np.vstack([W2, b2.reshape(1,-1)])
+    scores = A1.dot(W2)
+    print("X.shape" , X.shape)
+    print("W1.shape" , W1.shape)
+    print("A1.shape" , A1.shape)
+    print("W2.shape" , W2.shape)
+    print("b1.shape" , b1.shape)
+    print("b1.reshape(1,-1).shape" , b1.reshape(1,-1).shape)
+    print("b1.reshape(-1,1).shape" , b1.reshape(-1,1).shape)
+    print("b2.shape" , b2.shape)
     pass
     #############################################################################
     #                              END OF YOUR CODE                             #
@@ -149,6 +164,9 @@ class TwoLayerNet(object):
       # TODO: Create a random minibatch of training data and labels, storing  #
       # them in X_batch and y_batch respectively.                             #
       #########################################################################
+      mask = np.random.choice(num_train, batch_size, replace=False)
+      X_batch = X[mask]
+      y_batch = y[mask]
       pass
       #########################################################################
       #                             END OF YOUR CODE                          #
